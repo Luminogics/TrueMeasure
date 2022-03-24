@@ -1,0 +1,120 @@
+.MainBox {
+  height: 90vh;
+  width: 15%;
+  float: left;
+}
+.box {
+  height: 30%;
+  width: 100%;
+  float: left;
+}
+.heading1 {
+  width: 40%;
+  height: 15%;
+  margin: auto;
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.button {
+  width: 60%;
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid black;
+  box-shadow: 3px 1px black;
+  font-weight: 500;
+}
+.button:hover {
+  width: 63%;
+  height: 15%;
+  box-shadow: none;
+}
+table,
+th,
+td {
+  font-size: 16px;
+  padding: 2px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heading2 {
+  width: 70%;
+  height: 15%;
+  margin: auto;
+  text-align: center;
+  font-size: large;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.heading3 {
+  width: 80%;
+  height: 15%;
+  margin: auto;
+  text-align: center;
+  font-size: large;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-size: 11px;
+}
+.button1 {
+  width: 80%;
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid black;
+  box-shadow: 3px 1px black;
+  font-weight: 500;
+  background-color: #197050;
+  color: white;
+}
+.button2 {
+  width: 70%;
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid black;
+  box-shadow: 3px 1px black;
+  font-weight: 500;
+  background-color: #197050;
+  color: white;
+}
+.button3 {
+  width: 60%;
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  margin-left: 10px;
+  border-radius: 3px;
+  border: 1px solid black;
+  box-shadow: 3px 1px black;
+  font-weight: 500;
+  background-color: #197050;
+  color: white;
+}
+.date {
+  width: 50%;
+
+  float: left;
+}
+.input {
+  width: 100%;
+  font-size: 10px;
+}
