@@ -3,7 +3,8 @@ import geojson2h3 from 'geojson2h3';
 import polygon from '../coordinates';
 import {h3ToGeo} from "h3-js";
 
-import mapboxgl from '!mapbox-gl'; 
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+
 mapboxgl.accessToken = 'pk.eyJ1IjoibW91emFtMDA3IiwiYSI6ImNsMTR3MGZmejAwODQzaXMxcWdqMTMwOHcifQ.0zIQv2P6soKa7k178Y6neg';
 
 function RightNav() {
