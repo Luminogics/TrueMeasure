@@ -1,7 +1,7 @@
 import Header from "./Components/Header";
 import LeftNav from "./Components/LeftNav";
 import MapViewer from "./Components/MapViewer";
-import searchCity from "./SearchCity";
+import searchCity from "./Utilities/SearchCity";
 import { useState } from "react";
 export default function App() {
   const [leftCord, setLeftCord] = useState();

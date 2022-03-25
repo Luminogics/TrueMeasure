@@ -1,11 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import geojson2h3 from "geojson2h3";
-import polygon from "../Utilities/coordinates";
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import polygon from "../Utilities/Coordinates";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { token } from "../Utilities/constant"
-mapboxgl.accessToken =
-  token;
+import { token } from "../Utilities/Constant";
+mapboxgl.accessToken = token;
 
 function MapViewer({ leftCord, rightCord }) {
   const mapContainer = useRef(null);
@@ -23,19 +22,17 @@ function MapViewer({ leftCord, rightCord }) {
       style: "mapbox://styles/mapbox/dark-v10",
       center: [lng, lat],
       zoom: zoom,
-
-    })
+    });
     map.addControl(
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
+        mapboxgl: mapboxgl,
       })
     );
     let done;
     let count = 0;
 
     do {
-
       done = false;
       count += 1;
       try {
@@ -77,7 +74,6 @@ function MapViewer({ leftCord, rightCord }) {
   }
 
   const initializeMap = async () => {
-
     const hexagons = geojson2h3.featureToH3Set(polygon, 8);
     const feature = geojson2h3.h3SetToFeature(hexagons);
 
@@ -86,7 +82,6 @@ function MapViewer({ leftCord, rightCord }) {
         type: "geojson",
         data: feature,
       });
-
 
       // Add a new layer to visualize the polygon.
       map.addLayer({
