@@ -1,0 +1,22 @@
+
+
+  .mapboxgl-popup {
+      
+    background-color: red;
+      float: center;
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+.mapboxgl-popup-close-button{
+        box-sizing: none;
+        -webkit-box-sizing:none    
+}
+.mapViewer{
+  
+        top: 0;
+        bottom: 0;
+        width: "85%";
+        float: "left";
+     
+}
+

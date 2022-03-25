@@ -1,12 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import geojson2h3 from "geojson2h3";
-import polygon from "../coordinates";
-import { h3ToGeo } from "h3-js";
+import polygon from "../Utilities/coordinates";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-
+import { token } from "../Utilities/constant"
 mapboxgl.accessToken =
-  "pk.eyJ1IjoibW91emFtMDA3IiwiYSI6ImNsMTR3MGZmejAwODQzaXMxcWdqMTMwOHcifQ.0zIQv2P6soKa7k178Y6neg";
+  token;
 
 function MapViewer({ leftCord, rightCord }) {
   const mapContainer = useRef(null);
@@ -18,14 +17,13 @@ function MapViewer({ leftCord, rightCord }) {
   useEffect(() => {
     leftCord && setLng(leftCord);
     rightCord && setLat(rightCord);
-    console.log("USE EFFECT", lng, lat);
+
     map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/dark-v10",
       center: [lng, lat],
       zoom: zoom,
-      illOpacity: 0.75,
-      colorScale: Array(3)[("#ffffD9", "#50BAC3", "#1A468A")],
+
     })
     map.addControl(
       new MapboxGeocoder({
@@ -37,7 +35,7 @@ function MapViewer({ leftCord, rightCord }) {
     let count = 0;
 
     do {
-      console.log("WORKING");
+
       done = false;
       count += 1;
       try {
@@ -48,9 +46,9 @@ function MapViewer({ leftCord, rightCord }) {
         console.log("error");
       }
     } while (!done && count < 10);
-  }, [lng, lat, leftCord, rightCord]);
+  }, [lng, lat]);
 
-  let hexagons1 = () => {
+  let setHexagons = () => {
     const layer = {};
     polygon.features.forEach((feature) => {
       const hexagons = geojson2h3.featureToH3Set(feature, 7);
@@ -62,7 +60,6 @@ function MapViewer({ leftCord, rightCord }) {
   };
 
   function normalizeLayer(layer, zeroBaseline = false) {
-    console.log("normalizeLayer", layer);
     const hexagons = Object.keys(layer);
     // Pass one, get max (and min if needed)
     const max = hexagons.reduce(
@@ -76,36 +73,33 @@ function MapViewer({ leftCord, rightCord }) {
     hexagons.forEach((hex) => {
       layer[hex] = (layer[hex] - min) / (max - min);
     });
-    console.log("++++++LAYER++++++++++", layer);
     return layer;
   }
 
   const initializeMap = async () => {
-    console.log("HEXAGON", hexagons1());
+
     const hexagons = geojson2h3.featureToH3Set(polygon, 8);
     const feature = geojson2h3.h3SetToFeature(hexagons);
 
-    console.log(feature);
-    console.log("INITIALIZE");
     map.on("load", () => {
       map.addSource("maine", {
         type: "geojson",
         data: feature,
       });
 
-      // })
-      //     // Add a new layer to visualize the polygon.
+
+      // Add a new layer to visualize the polygon.
       map.addLayer({
         id: "maine",
         type: "fill",
         source: "maine", // reference the data source
         layout: {},
         paint: {
-          "fill-color": "#50BAC3", // blue color fill
+          "fill-color": "#50BAC3",
           "fill-opacity": 0.5,
         },
       });
-      //     // Add a black outline around the polygon.
+      // Add a black outline around the polygon.
       map.addLayer({
         id: "outline",
         type: "line",
@@ -133,30 +127,6 @@ function MapViewer({ leftCord, rightCord }) {
           .setLngLat(coordinates)
           .setHTML(description)
           .addTo(map);
-      });
-      // Create a popup, but don't add it to the map yet.
-      const popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-      });
-      console.log("POPUP", popup);
-
-      map.on("mouseenter", "maine", (e) => {
-        console.log("Event", e);
-        // Change the cursor style as a UI indicator.
-        map.getCanvas().style.cursor = "pointer";
-
-        // Copy coordinates array.
-        const coordinates = e.features[0].geometry.coordinates;
-        const description = e.features[0].properties.DISPLAY_NAME;
-
-        // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        // }
-
-        console.log("");
-        console.log("COORDINATES", coordinates);
-        popup.setLngLat(coordinates).setHTML(description).addTo(map);
       });
     });
   };

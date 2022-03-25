@@ -16,9 +16,9 @@ function DropDownButton(props) {
       style={{ marginLeft: "10px" }}
       variant="outline-secondary"
     >
-      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-      <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-      <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+      <Dropdown.Item href="#/action-1">Latency</Dropdown.Item>
+      <Dropdown.Item href="#/action-2">Coverage</Dropdown.Item>
+      <Dropdown.Item href="#/action-3">5G Availability</Dropdown.Item>
     </DropdownButton>
   );
 }
