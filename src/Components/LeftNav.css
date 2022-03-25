@@ -18,7 +18,7 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-.button {
+.buttonx {
   width: 60%;
   height: 15%;
   display: flex;
@@ -114,7 +114,7 @@ td {
 
   float: left;
 }
-.input {
+.inputx {
   width: 100%;
   font-size: 10px;
 }

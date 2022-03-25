@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   DropdownButton,
@@ -12,11 +12,15 @@ import {
 import Button from "react-bootstrap/Button";
 import { BsSearch } from "react-icons/bs";
 import DropDownButton from "./DropDownButton";
-function Header() {
+function Header({ clickHandler }) {
+  const [searchCord, setSearchCord] = useState();
+  const submitHandler = (e) => {
+    e.preventDefault();
+  }
   return (
     <Navbar expand="lg" style={{ color: "white" }}>
       <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+        <Navbar.Brand href="#">True Measure</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -30,8 +34,10 @@ function Header() {
                 placeholder="Search"
                 style={{ width: "300px" }}
                 aria-label="Search"
+                onSubmit={submitHandler}
+                onChange={(e) => setSearchCord(e.target.value)}
               />
-              <Button>
+              <Button onClick={() => clickHandler(searchCord)}>
                 <BsSearch /> Search
               </Button>
             </Form>

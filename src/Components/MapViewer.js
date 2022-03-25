@@ -2,29 +2,37 @@ import React, { useRef, useEffect, useState } from "react";
 import geojson2h3 from "geojson2h3";
 import polygon from "../coordinates";
 import { h3ToGeo } from "h3-js";
-
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW91emFtMDA3IiwiYSI6ImNsMTR3MGZmejAwODQzaXMxcWdqMTMwOHcifQ.0zIQv2P6soKa7k178Y6neg";
 
-function MapViewer() {
+function MapViewer({ leftCord, rightCord }) {
   const mapContainer = useRef(null);
   let map = null;
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
+  const [lng, setLng] = useState(-122.186688);
+  const [lat, setLat] = useState(37.759638);
   const [zoom, setZoom] = useState(9);
 
   useEffect(() => {
+    leftCord && setLng(leftCord);
+    rightCord && setLat(rightCord);
+    console.log("USE EFFECT", lng, lat);
     map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/dark-v10",
-      //center: [lng, lat],
-      center: [-122.186688, 37.759638],
+      center: [lng, lat],
       zoom: zoom,
       illOpacity: 0.75,
       colorScale: Array(3)[("#ffffD9", "#50BAC3", "#1A468A")],
-    });
+    })
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      })
+    );
     let done;
     let count = 0;
 
@@ -40,7 +48,7 @@ function MapViewer() {
         console.log("error");
       }
     } while (!done && count < 10);
-  }, []);
+  }, [lng, lat, leftCord, rightCord]);
 
   let hexagons1 = () => {
     const layer = {};
@@ -126,7 +134,6 @@ function MapViewer() {
           .setHTML(description)
           .addTo(map);
       });
-
       // Create a popup, but don't add it to the map yet.
       const popup = new mapboxgl.Popup({
         closeButton: false,
@@ -147,7 +154,7 @@ function MapViewer() {
         //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         // }
 
-        console.log("")
+        console.log("");
         console.log("COORDINATES", coordinates);
         popup.setLngLat(coordinates).setHTML(description).addTo(map);
       });
