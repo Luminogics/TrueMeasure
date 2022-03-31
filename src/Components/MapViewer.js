@@ -78,51 +78,67 @@ function MapViewer({ leftCord, rightCord }) {
     const feature = geojson2h3.h3SetToFeature(hexagons);
 
     map.on("load", () => {
-      map.addSource("maine", {
-        type: "geojson",
-        data: feature,
-      });
+      const sourceId = 'h3-hexes';
+      const layerId = `${sourceId}-layer`;
+
+      let source = map.getSource(sourceId);
+
+      // Add the source and layer if we haven't created them yet
+      if (!source) {
+        map.addSource(sourceId, {
+          type: 'geojson',
+          data: feature
+        });
+        map.addLayer({
+          id: layerId,
+          source: sourceId,
+          type: 'fill',
+          interactive: false,
+          paint: {
+            'fill-outline-color': 'rgba(0,0,0,0)',
+          }
+        });
+        source = map.getSource(sourceId);
+      }
+
 
       // Add a new layer to visualize the polygon.
       map.addLayer({
-        id: "maine",
+        id: "outline",
         type: "fill",
-        source: "maine", // reference the data source
-        layout: {},
+        source: sourceId, // reference the data source
+        type: 'fill',
+        interactive: false,
         paint: {
-          "fill-color": "#50BAC3",
+          'fill-outline-color': 'rgba(0,0,0,0)',
           "fill-opacity": 0.5,
-        },
+        }
       });
+      // Update the geojson data
+      source.setData(feature);
       // Add a black outline around the polygon.
       map.addLayer({
-        id: "outline",
+        id: layerId,
         type: "line",
-        source: "maine",
+        source: sourceId,
         layout: {},
         paint: {
           "line-color": "#000",
-          "line-width": 3,
+          "line-width": 5,
         },
       });
 
-      map.on("click", "places", (e) => {
-        // Copy coordinates array.
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const description = e.features[0].properties.description;
 
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+      map.setPaintProperty(layerId, 'fill-color', '#feb24c');
 
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(description)
-          .addTo(map);
-      });
+      // map.setPaintProperty(layerId, 'fill-color',
+      //   [
+      //     'match', ['get', 'id'],
+      //     46, 'red',
+      //     151, 'green',
+      //   ]); 
+
+
     });
   };
 
