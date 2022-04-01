@@ -1,16 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react'
 import geojson2h3 from 'geojson2h3';
-import polygon from '../Utilities/Coordinates';
+import polygon from '../Utilities/coordinates';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import { token } from '../Utilities/Constant';
+import { token } from '../Utilities/constant';
 mapboxgl.accessToken = token;
+
 function MapViewer({ leftCord, rightCord }) {
   const mapContainer = useRef(null)
   let map = null
   const [lng, setLng] = useState(-122.186688)
   const [lat, setLat] = useState(37.759638)
   const [zoom, setZoom] = useState(9)
+  
   useEffect(() => {
     leftCord && setLng(leftCord)
     rightCord && setLat(rightCord)
