@@ -5,6 +5,7 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { token } from "../Utilities/constant";
 import { layer } from "@fortawesome/fontawesome-svg-core";
+import "./MapViewer.css"
 mapboxgl.accessToken = token;
 
 function MapViewer({ leftCord, rightCord }) {
@@ -147,7 +148,7 @@ function MapViewer({ leftCord, rightCord }) {
       });
 
       map.on("mouseenter", layerId, (e) => {
-      
+
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = "pointer";
 
@@ -155,12 +156,12 @@ function MapViewer({ leftCord, rightCord }) {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties;
 
-       
+
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-       // popup.setLngLat([-122.1835470199585, 37.80724101305343]).setHTML(description.value).addTo(map);
+        // popup.setLngLat([-122.1835470199585, 37.80724101305343]).setHTML(description.value).addTo(map);
       });
     });
   };
@@ -169,7 +170,7 @@ function MapViewer({ leftCord, rightCord }) {
     <div
       style={{
         width: "85%",
-        float: "left",
+        float: "left"
       }}
     >
       <div className="sidebar">

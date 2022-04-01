@@ -18,14 +18,14 @@ function Header({ clickHandler }) {
     e.preventDefault();
   }
   return (
-    <Navbar expand="lg" style={{ color: "white" }}>
+    <Navbar expand="lg" style={{ color: "white", boxShadow: "5px 10px 18px #888888" }}>
       <Container fluid>
         <Navbar.Brand href="#">True Measure</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
             className="me-auto my-2 my-lg-0 m-5"
-            style={{ maxHeight: "800px", margin: "12px" }}
+            style={{ maxHeight: "200px", marginLeft: "12px" }}
             navbarScroll
           >
             <Form className="d-flex">
@@ -41,13 +41,15 @@ function Header({ clickHandler }) {
                 <BsSearch /> Search
               </Button>
             </Form>
-            <DropDownButton title="Single Service Provider" />
-            <DropDownButton title="Throughput" />
-            <DropDownButton title="ATI" />
+            <div style={{ float: "left" }}>
+              <DropDownButton title="Single Service Provider" />
+              <DropDownButton title="Throughput" />
+              <DropDownButton title="ATI" />
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Container>
-    </Navbar>
+    </Navbar >
   );
 }
 

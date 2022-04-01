@@ -7,9 +7,9 @@ function LeftNav() {
     <div className="MainBox">
       <div className="box">
         <div className="heading1">ATT</div>
-        <div className="button">Network Meta Data</div>
+        <div className="buttonx">Network Meta Data</div>
         <div>
-          <table style={{ width: "200px" }}>
+          <table style={{ width: "150px" }}>
             <tr>
               <th>5g</th>
               <td>cell IDs</td>
@@ -33,7 +33,7 @@ function LeftNav() {
         <div className="heading2">DL Throughput</div>
         <div className="heading3">Number of Good poor and bad</div>
         <div>
-          <table style={{ width: "200px" }}>
+          <table style={{ width: "150px" }}>
             <tr>
               <th>
                 <div className="button1">Good</div>
@@ -58,24 +58,24 @@ function LeftNav() {
       <div className="box">
         <div className="heading2">Comparison</div>
         <div className="heading3">track hex during the period</div>
-        <div className="date">
+        <div className="date1">
           <input
             type="month"
             id="start"
             name="start"
             placeholder="asd"
             value={startDate}
-            className="input"
+            className="input1"
             onChange={(e) => setstartDate(e.target.value)}
           />
         </div>
-        <div className="date">
+        <div className="date2">
           <input
             type="month"
             id="start"
             name="start"
             value={endDate}
-            className="input"
+            className="input2"
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
