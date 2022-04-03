@@ -1,24 +1,33 @@
 import React, { useRef, useEffect, useState } from "react";
 import geojson2h3 from "geojson2h3";
-import polygon from "../Utilities/coordinates";
+import { polygonTwo, polygonOne, polygonThree } from "../Utilities/coordinates";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { token } from "../Utilities/constant";
 import { layer } from "@fortawesome/fontawesome-svg-core";
-import "./MapViewer.css"
+import "./MapViewer.css";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+//https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+
 mapboxgl.accessToken = token;
 
-function MapViewer({ leftCord, rightCord }) {
+function MapViewer({ leftCord, rightCord, value }) {
   const mapContainer = useRef(null);
+ 
   let map = null;
-  const [lng, setLng] = useState(-122.186688);
-  const [lat, setLat] = useState(37.759638);
+  const [lng, setLng] = useState(-122.304026);
+  const [lat, setLat] = useState(37.807388);
   const [zoom, setZoom] = useState(9);
 
   useEffect(() => {
-    leftCord && setLng(leftCord);
-    rightCord && setLat(rightCord);
-
+    if (value=== 10) {
+      setLng(-122.304026);
+      setLat(37.807388);
+    } else {
+      setLng(-121.353637);
+      setLat(40.584978);
+    }
     map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/dark-v10",
@@ -29,8 +38,19 @@ function MapViewer({ leftCord, rightCord }) {
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
+
+        // see https://docs.mapbox.com/api/search/#geocoding-response-object for information about the schema of each response feature
+        render: function (item) {
+          const maki = item.properties.maki || "marker";
+          return `<div class='geocoder-dropdown-item'>
+              <span class='geocoder-dropdown-text'>
+                ${item.text}
+              </span> 
+            </div>`;
+        },
       })
     );
+
     let done;
     let count = 0;
     do {
@@ -44,33 +64,9 @@ function MapViewer({ leftCord, rightCord }) {
         console.log("error");
       }
     } while (!done && count < 10);
-  }, [lng, lat]);
-  let setHexagons = () => {
-    const layer = {};
-    polygon.features.forEach((feature) => {
-      const hexagons = geojson2h3.featureToH3Set(feature, 7);
-      hexagons.forEach((h3Index) => {
-        layer[h3Index] = feature.properties.travelTime;
-      });
-    });
-    return normalizeLayer(layer);
-  };
-  function normalizeLayer(layer, zeroBaseline = false) {
-    const hexagons = Object.keys(layer);
-    // Pass one, get max (and min if needed)
-    const max = hexagons.reduce(
-      (max, hex) => Math.max(max, layer[hex]),
-      -Infinity
-    );
-    const min = zeroBaseline
-      ? 0
-      : hexagons.reduce((min, hex) => Math.min(min, layer[hex]), Infinity);
-    // Pass two, normalize
-    hexagons.forEach((hex) => {
-      layer[hex] = (layer[hex] - min) / (max - min);
-    });
-    return layer;
-  }
+  }, [lng, lat, value]);
+
+
   const initializeMap = async () => {
     let config = {
       lng: -122.2,
@@ -79,15 +75,19 @@ function MapViewer({ leftCord, rightCord }) {
       fillOpacity: 0.75,
       colorScale: ["#FF0000", "#008000", "#FFFF00", "#338c94"],
     };
-    const hexagons = geojson2h3.featureToH3Set(polygon, 8);
+    let shape;
+    value === 10 ? (shape = polygonThree) : (shape = polygonOne);
+    const hexagons = geojson2h3.featureToH3Set(shape, 8);
     const feature = geojson2h3.h3SetToFeatureCollection(hexagons, (hex) => ({
       value: Number(Math.floor(Math.random() * 100)),
     }));
-    console.log(feature);
+    
+
     map.on("load", () => {
-      const sourceId = "h3-hexes";
+      const sourceId = `${value}-h3-hexes`;
       const layerId = `${sourceId}-layer`;
       let source = map.getSource(sourceId);
+
       // Add the source and layer if we haven't created them yet
       if (!source) {
         map.addSource(sourceId, {
@@ -130,6 +130,7 @@ function MapViewer({ leftCord, rightCord }) {
           "line-width": 5,
         },
       });
+
       // map.setPaintProperty(layerId, 'fill-color', '#feb24c')
       map.setPaintProperty(layerId, "fill-color", {
         property: "value",
@@ -141,6 +142,11 @@ function MapViewer({ leftCord, rightCord }) {
         ],
       });
 
+      // map.removeLayer(`${value}-h3-hexes-layer`);
+
+      // map.removeLayer(`outline`);
+      // //
+      // map.removeSource(`${value}-h3-hexes`)
       // Create a popup, but don't add it to the map yet.
       const popup = new mapboxgl.Popup({
         closeButton: false,
@@ -148,7 +154,6 @@ function MapViewer({ leftCord, rightCord }) {
       });
 
       map.on("mouseenter", layerId, (e) => {
-
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = "pointer";
 
@@ -156,12 +161,14 @@ function MapViewer({ leftCord, rightCord }) {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties;
 
-
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        // popup.setLngLat([-122.1835470199585, 37.80724101305343]).setHTML(description.value).addTo(map);
+        //-122.304026,
+        //37.807388
+
+        //popup.setLngLat(coordinates).setHTML(description.value).addTo(map);
       });
     });
   };
@@ -170,9 +177,10 @@ function MapViewer({ leftCord, rightCord }) {
     <div
       style={{
         width: "85%",
-        float: "left"
+        float: "left",
       }}
     >
+      <div className="geocoder"></div>
       <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
       </div>

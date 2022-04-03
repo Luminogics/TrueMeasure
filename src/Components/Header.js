@@ -12,10 +12,15 @@ import {
 import Button from "react-bootstrap/Button";
 import { BsSearch } from "react-icons/bs";
 import DropDownButton from "./DropDownButton";
-function Header({ clickHandler }) {
+function Header({ clickHandler ,setThroughPutValue}) {
   const [searchCord, setSearchCord] = useState();
   const submitHandler = (e) => {
     e.preventDefault();
+  }
+
+  const setValue = (val) =>{
+   
+    setThroughPutValue(val)
   }
   return (
     <Navbar expand="lg" style={{ color: "white", boxShadow: "5px 10px 18px #888888" }}>
@@ -42,9 +47,9 @@ function Header({ clickHandler }) {
               </Button>
             </Form>
             <div style={{ float: "left" }}>
-              <DropDownButton title="Single Service Provider" />
-              <DropDownButton title="Throughput" />
-              <DropDownButton title="ATI" />
+              <DropDownButton title="Single Service Provider"  setValue={setValue}/>
+              <DropDownButton title="Throughput" setValue={setValue} />
+              <DropDownButton title="ATI" setValue={setValue}/>
             </div>
           </Nav>
         </Navbar.Collapse>

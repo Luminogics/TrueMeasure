@@ -1,20 +1,14 @@
 const searchCity = [
   {
-    name: "London",
-    lat: -122.186688,
-    lon: 37.759638,
+
+    lat:  -122.304026,
+    lon:  37.807388,
   },
   {
-    name: "america",
-    lat: 51.5072,
-    lon: 0.1276,
+    lat: -121.353637,
+    lon: 40.584978,
   },
-  { name: "Pakistan", lat: 30.3753, lon: 69.3451 },
-  {
-    name: "france",
-    lat: 251.5085,
-    lon: 50.1257,
-  },
+
 ];
 
 export default searchCity;
